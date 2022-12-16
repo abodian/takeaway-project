@@ -143,7 +143,6 @@ _Create examples of the classes being used together in different situations and
 combinations that reflect the ways in which the system will be used._
 
 ```ruby
-# EXAMPLE
 
 # 1 lists a menu of dishes
 customer_order = CustomerOrder.new(001)
@@ -256,8 +255,6 @@ verify.verify => returns false
 text = OrderText.new(001)
 text.sms_confirmation => # returns (example) "Thank you! Your order (number) was placed and will be delivered before 18:52"
 ```
-
-_Encode each example as a test. You can add to the above list as you go._
 
 ## 5. Implement the Behaviour
 

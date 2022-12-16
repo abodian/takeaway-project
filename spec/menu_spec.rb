@@ -1,13 +1,18 @@
 require "menu"
 
-# # 1 constructs class
-# menu = Menu.new(chinese)
-# menu.list_array => returns an array of chinese menu
+describe "menu class" do
+  it "returns an aray of a chosen menu" do
+    menu = Menu.new("chinese")
+    expect(menu.list_array).to eq $menu_list
+  end
 
-# # 2 returns dish_name
-# menu = Menu.new(chinese)
-# menu.dish_name(01) => returns name of dish 01
+  it "returns dish name" do
+    menu = Menu.new("chinese")
+    expect(menu.dish_name("01")).to eq "Egg Fried Rice"
+  end
 
-# # 3 returns dish_price
-# menu = Menu.new(chinese)
-# menu.dish_price(01) => returns price of dish 01
+  it "returns dish price" do
+    menu = Menu.new("chinese")
+    expect(menu.dish_price("01")).to eq 2.00
+  end
+end
