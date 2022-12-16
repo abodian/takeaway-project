@@ -10,6 +10,11 @@ describe "menu class" do
     menu = Menu.new("chinese")
     expect(menu.dish_name("01")).to eq "Egg Fried Rice"
   end
+  
+  it "returns dish name" do
+    menu = Menu.new("chinese")
+    expect(menu.dish_name("02")).to eq "Prawn Toast"
+  end
 
   it "returns dish price" do
     menu = Menu.new("chinese")
