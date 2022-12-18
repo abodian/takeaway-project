@@ -2,15 +2,30 @@ require_relative "../lib/customer_order"
 
 describe "customer order class" do
   it "returns the order number" do
-    customer_order = CustomerOrder.new("chinese")
+    io = double :io
+    customer_order = CustomerOrder.new("chinese", io)
     expect(customer_order.order_number).to eq "001"
   end
 
   it "shows the menu" do
-    customer_order = CustomerOrder.new("chinese")
-    expect do
-      (customer_order.show_menu).to output("01 - Egg Fried Rice\n02 - Prawn Toast").to_stdout
-    end
+    io = double :io
+    expect(io).to receive(:puts).with(["01 - Egg Fried Rice", "02 - Prawn Toast"])
+    customer_order = CustomerOrder.new("chinese", io)
+    customer_order.show_menu
+  end
+end
+
+describe "testing add_dishes method" do
+  it "asks the user to choose a dish, then user types checkout, method accepts request with string output" do
+    io = double :io
+    expect(io).to receive(:puts).with("Enter the number of the dish you would like to choose(or 'checkout' to finish) a dish number to add it to your order: ")
+    expect(io).to receive(:gets).and_return("01")
+    expect(io).to receive(:puts).with("Egg Fried Rice added to your order")
+    expect(io).to receive(:puts).with("Enter the number of the dish you would like to choose(or 'checkout' to finish) a dish number to add it to your order: ")
+    expect(io).to receive(:gets).and_return("checkout")
+    expect(io).to receive(:puts).with("Moving to order verification...")
+    customer_order = CustomerOrder.new("chinese", io)
+    output = customer_order.add_dishes
   end
 end
 

@@ -6,6 +6,10 @@ class Menu
     @menu_list = []
   end
 
+  def return_menu_hash
+    return @chinese_menu
+  end
+
   def list_menu
     @cuisine == "chinese" ? @chinese_menu : @indian_menu
     @chinese_menu.each { | number, dish |
