@@ -3,7 +3,7 @@ require "menu"
 describe "menu class" do
   it "returns an aray of a chosen menu" do
     menu = Menu.new("chinese")
-    expect(menu.list_array).to eq $menu_list
+    expect(menu.list_menu).to eq ["01 - Egg Fried Rice", "02 - Prawn Toast"]
   end
 
   it "returns dish name" do

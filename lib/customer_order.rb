@@ -1,15 +1,21 @@
+require_relative "./menu.rb"
+
 class CustomerOrder
-  def initialize(order_number)
-    $order_number = order_number
-    $customer_order = []
+  def initialize(cuisine)
+    @cuisine = cuisine
+    @order_number = "001"
+    @customer_order = []
+    @instance_of_menu = Menu.new(@cuisine)
+    @customer_menu = []
   end
 
   def order_number
-    # returns order number
+    @order_number
   end
 
-  def show_menu(menu)
-    # gets chinese menu from an instance of Menu class and formats list, storing in instance variable, returns to user
+  def show_menu
+    @customer_menu << @instance_of_menu.list_menu
+    puts @customer_menu.flatten
   end
 
   def add_dishes 
@@ -26,3 +32,6 @@ class CustomerOrder
     # returns to add_dishes
   end
 end
+
+order = CustomerOrder.new("chinese")
+order.show_menu

@@ -1,12 +1,18 @@
-require "customer_order"
+require_relative "../lib/customer_order"
 
-# # 1 constructs the class
-# chinese_order = CustomerOrder(001)
-# chinese_order.order_number => "returns 001"
+describe "customer order class" do
+  it "returns the order number" do
+    customer_order = CustomerOrder.new("chinese")
+    expect(customer_order.order_number).to eq "001"
+  end
 
-# # 2 shows menu, using a double for Menu class
-# chinese_order = CustomerOrder(001)
-# chinese_order.show_menu(chinese) => "returns mock chinese menu"
+  it "shows the menu" do
+    customer_order = CustomerOrder.new("chinese")
+    expect do
+      (customer_order.show_menu).to output("01 - Egg Fried Rice\n02 - Prawn Toast").to_stdout
+    end
+  end
+end
 
 # # 3 asks user to add dishes and returns the customer order
 # chinese_order = CustomerOrder(001)
