@@ -1,30 +1,40 @@
 class OrderVerify
-  def initialize(order_number)
+  def initialize(order_number, order_array, io)
     @order_number = order_number
-    @menu_list = []
-  #   receipt
-  #   grand_total
-  #   verify
+    @order_array = order_array
+    @io = io
   end
 
-  def receipt(order_array)
+  def receipt
     n = 1
-    order_array.each { | dish, price |
-      p "#{n}. #{dish} - £#{price}"
+    @order_list = []
+    @order_array.each { | dish, price |
+      price_format = format("%.2f", price)
+      @order_list << "#{n}. #{dish} - £#{price_format}"
       n += 1
     }
+    @io.puts @order_list
+    grand_total
   end
 
   def grand_total
-    # calculates and returns price of order
+    total = []
+    @order_array.each { | dish, price |
+      total << price
+      }
+    total_sum = total.sum
+    price_format = format("%.2f", total_sum)
+    @io.puts "---------------------\nTotal Cost: £#{price_format}"
   end
 
   def verify
-    # shows user receipt and grand_total
-    # prompts user to confirm and verify order
-    # returns true or false
+    @io.puts "Your order number #{@order_number} looks like this:"
+    receipt
+    @io.puts "Are you happy with your order? (Y - to proceed(automatic payment), or N - to edit order): "
+    user_choice = @io.gets.chomp.downcase 
+    user_choice == "y" ? true : false
   end
 end
 
-# verify = OrderVerify.new("001")
-# verify.receipt([["Egg Fried Rice", 2.0], ["Prawn Toast", 5.0]])
+# verify = OrderVerify.new("001", [["Egg Fried Rice", 2.50], ["Prawn Toast", 5.00]], Kernel)
+# verify.receipt

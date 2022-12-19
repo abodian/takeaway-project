@@ -5,17 +5,31 @@ class CustomerOrder
   attr_reader :order_number
   attr_reader :customer_order
   
-  def initialize(cuisine, io)
-    @cuisine = cuisine
+  def initialize(io)
+    @cuisine = nil
     @order_number = "001"
     @customer_order = []
     @instance_of_menu = Menu.new(@cuisine)
+    @instance_of_verify = OrderVerify.new(@order_number, @customer_order, Kernel)
     @customer_menu = @instance_of_menu.list_menu
     @menu_hash = @instance_of_menu.return_menu_hash
     @io = io
   end
 
+  def run 
+    show_menu
+    build_order
+    order_verify?
+  end
+
   def show_menu
+    @io.puts "Please choose between chinese or indian takeaway: "
+    @cuisine = @io.gets.chomp
+    @instance_of_menu = Menu.new(@cuisine)
+    @io.puts "#{@cuisine.capitalize} Takeaway Menu"
+    @io.puts "------------------------------------"
+    @customer_menu = @instance_of_menu.list_menu
+    @menu_hash = @instance_of_menu.return_menu_hash
     @io.puts @customer_menu
   end
 
@@ -67,15 +81,10 @@ class CustomerOrder
 
   def order_verify?
     verified = false
-    verify = OrderVerify.new("001")
     while verified == false
-      @io.puts "Your order looks like this:"
-      verify.receipt(@customer_order)
-      @io.puts "Move to payment? (Y - to proceed, or N - to edit order): "
-      user_choice = @io.gets.chomp.downcase 
-      if user_choice == "y"
-        verify = true
-        verify.grand_total
+      if @instance_of_verify.verify == true
+        verified= true
+        @io.puts "Thank you for your payment, you will shortly receive a confirmation text"
       else 
         build_order
       end
@@ -83,7 +92,5 @@ class CustomerOrder
   end
 end
 
-# order = CustomerOrder.new("chinese", Kernel)
-# order.show_menu
-# order.build_order
-# order.order_verify?
+order = CustomerOrder.new(Kernel)
+order.run

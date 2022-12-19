@@ -1,24 +1,25 @@
 require "order_verify"
 
 describe "order verify class" do
-  it "prints an itemised receipt" do
-    verify = OrderVerify.new("001")
-    expect(verify.receipt(["01 Test", "02 Test"])).to eq ["01 Test", "02 Test"]
-  end
-
-# # 1 returns list of order
-# verify = OrderVerify.new
-# verify.receipt => returns itemised receipt of order
-
-# # 2 returns full cost of order
-# verify = OrderVerify.new
-# verify.grand_total => returns itemised receipt of order
-
-# # 3 asks the user to verify they are happy with the order - customer is happy
-# verify = OrderVerify.new
-# verify.verify => returns true
-
-# # 4 asks the user to verify they are happy with the order - customer is not happy
-# verify = OrderVerify.new
-# verify.verify => returns false
+  it "prints order and prompts user to validate true" do
+    io = double :io
+    expect(io).to receive(:puts).with("Your order number 001 looks like this:")
+    expect(io).to receive(:puts).with(["1. Egg Fried Rice - £2.50", "2. Prawn Toast - £5.00"])
+    expect(io).to receive(:puts).with("---------------------\nTotal Cost: £7.50")
+    expect(io).to receive(:puts).with("Are you happy with your order? (Y - to proceed(automatic payment), or N - to edit order): ")
+    expect(io).to receive(:gets).and_return("y")
+    verify = OrderVerify.new("001", [["Egg Fried Rice", 2.50], ["Prawn Toast", 5.00]], io)
+    expect(verify.verify).to eq true
+  end 
+  
+  it "prints order and prompts user to validate false" do
+    io = double :io
+    expect(io).to receive(:puts).with("Your order number 001 looks like this:")
+    expect(io).to receive(:puts).with(["1. Egg Fried Rice - £2.50", "2. Prawn Toast - £5.00"])
+    expect(io).to receive(:puts).with("---------------------\nTotal Cost: £7.50")
+    expect(io).to receive(:puts).with("Are you happy with your order? (Y - to proceed(automatic payment), or N - to edit order): ")
+    expect(io).to receive(:gets).and_return("n")
+    verify = OrderVerify.new("001", [["Egg Fried Rice", 2.50], ["Prawn Toast", 5.00]], io)
+    expect(verify.verify).to eq false
+  end 
 end

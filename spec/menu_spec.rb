@@ -3,7 +3,7 @@ require "menu"
 describe "menu class" do
   it "returns an aray of a chosen menu" do
     menu = Menu.new("chinese")
-    expect(menu.list_menu).to eq ["01 - Egg Fried Rice - £2.00", "02 - Prawn Toast - £5.00"]
+    expect(menu.list_menu).to eq ["01 - Egg Fried Rice - £2.50", "02 - Prawn Toast - £5.00"]
   end
 
   it "returns dish name" do
@@ -18,6 +18,6 @@ describe "menu class" do
 
   it "returns dish price" do
     menu = Menu.new("chinese")
-    expect(menu.dish_price("01")).to eq 2.00
+    expect(menu.dish_price("01")).to eq 2.50
   end
 end
