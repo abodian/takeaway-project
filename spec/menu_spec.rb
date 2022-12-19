@@ -1,9 +1,14 @@
 require "menu"
 
 describe "menu class" do
-  it "returns an aray of a chosen menu" do
+  it "returns an array of a chosen chinese menu" do
     menu = Menu.new("chinese")
     expect(menu.list_menu).to eq ["01 - Egg Fried Rice - £2.50", "02 - Prawn Toast - £5.00"]
+  end
+  
+  it "returns an aray of a chosen indian menu" do
+    menu = Menu.new("indian")
+    expect(menu.list_menu).to eq ["01 - Onion Bhaji - £3.50", "02 - Chicken Korma - £7.00"]
   end
 
   it "returns dish name" do

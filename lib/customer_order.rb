@@ -51,11 +51,13 @@ class CustomerOrder
     if @dish_number == "checkout"
       @order_complete = true
     else
+      @io.puts "How many of that dish would you like to add: "
+      @dish_amount = @io.gets.to_i
       chosen_dish_details = @menu_hash[@dish_number]
       if chosen_dish_details
         chosen_dish = chosen_dish_details[0]
-        @customer_order << chosen_dish_details
-        @io.puts "#{chosen_dish} added to your order"
+        @dish_amount.times { @customer_order << chosen_dish_details }
+        @io.puts "#{@dish_amount} x #{chosen_dish} added to your order"
       else
         @io.puts "Sorry, that dish does not exist. Please try again"
       end
@@ -71,8 +73,11 @@ class CustomerOrder
       chosen_dish_details = @menu_hash[@dish_number]
       if chosen_dish_details
         chosen_dish = chosen_dish_details[0]
-        @customer_order.delete(chosen_dish_details)
-        @io.puts "#{chosen_dish} removed from your order"
+        index = @customer_order.index { |dish| dish[0] == chosen_dish }
+        if index
+          @customer_order.delete_at(index)
+          @io.puts "#{chosen_dish} removed from your order"
+        end
       else
         @io.puts "Sorry, that dish does not exist. Please try again"
       end
@@ -84,7 +89,7 @@ class CustomerOrder
     while verified == false
       if @instance_of_verify.verify == true
         verified= true
-        @io.puts "Thank you for your payment, you will shortly receive a confirmation text"
+        @io.puts "Thank you for your payment, you will soon receive a confirmation text :)"
       else 
         build_order
       end

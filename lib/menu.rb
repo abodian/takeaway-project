@@ -7,7 +7,7 @@ class Menu
   end
 
   def return_menu_hash
-    return @chinese_menu
+    @cuisine == "chinese" ? @chinese_menu : @indian_menu
   end
 
   def list_menu
