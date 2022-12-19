@@ -38,61 +38,50 @@ class CustomerOrder
     while !@order_complete
       @io.puts "Enter the number of the dish you would like to add to your order (or 'remove' to remove a dish, or 'checkout' to finish): "
       @dish_number = @io.gets.chomp
-      if @dish_number == "remove"
-        remove_dishes
-      else
-        add_dishes
-      end
+      @dish_number == "remove" ? remove_dishes : add_dishes
     end
     @io.puts "Moving to order verification..."
   end
 
   def add_dishes
-    if @dish_number == "checkout"
-      @order_complete = true
-    else
-      @io.puts "How many of that dish would you like to add: "
-      @dish_amount = @io.gets.to_i
-      chosen_dish_details = @menu_hash[@dish_number]
-      if chosen_dish_details
-        chosen_dish = chosen_dish_details[0]
-        @dish_amount.times { @customer_order << chosen_dish_details }
-        @io.puts "#{@dish_amount} x #{chosen_dish} added to your order"
-      else
-        @io.puts "Sorry, that dish does not exist. Please try again"
-      end
-    end
+    return @order_complete = true if @dish_number == "checkout"
+  
+    @io.puts "How many of that dish would you like to add: "
+    @dish_amount = @io.gets.to_i
+    chosen_dish_details = @menu_hash[@dish_number]
+    return @io.puts "Sorry, that dish does not exist. Please try again." unless chosen_dish_details
+  
+    chosen_dish = chosen_dish_details[0]
+    @dish_amount.times { @customer_order << chosen_dish_details }
+    @io.puts "#{@dish_amount} x #{chosen_dish} added to your order"
   end
 
   def remove_dishes
-    @io.puts "Enter the number of the dish you would like to remove from your order(or 'checkout' to finish): "
-    @dish_number = @io.gets.chomp
-    if @dish_number == "checkout"
-      @order_complete = true
-    else
-      chosen_dish_details = @menu_hash[@dish_number]
-      if chosen_dish_details
-        chosen_dish = chosen_dish_details[0]
-        index = @customer_order.index { |dish| dish[0] == chosen_dish }
-        if index
-          @customer_order.delete_at(index)
-          @io.puts "#{chosen_dish} removed from your order"
-        end
-      else
-        @io.puts "Sorry, that dish does not exist. Please try again"
-      end
+    @io.puts "Enter the NAME of the dish you would like to remove from your order(or 'checkout' to finish): "
+    dish_name = @io.gets.chomp
+    @order_complete = true if dish_name == "checkout"
+  
+    chosen_dish_details = @menu_hash.values.find { |dish| dish[0].downcase == dish_name.downcase }
+    @io.puts "Sorry, that dish does not exist. Please try again." unless chosen_dish_details
+  
+    @io.puts "Enter the number of dishes to remove: "
+    num_dishes = @io.gets.chomp.to_i
+    num_dishes.times do
+      index = @customer_order.index { |dish| dish[0].downcase == dish_name.downcase }
+      @io.puts "Sorry, there are no more dishes of that type in your order." unless index
+  
+      @customer_order.delete_at(index)
     end
+    @io.puts "#{num_dishes.to_s} x #{dish_name.upcase} removed from your order"
   end
 
   def order_verify?
     verified = false
     while verified == false
-      if @instance_of_verify.verify == true
-        verified= true
-        @io.puts "Thank you for your payment, you will soon receive a confirmation text :)"
-      else 
-        build_order
-      end
+      return build_order unless @instance_of_verify.verify == true
+
+      verified = true
+      @io.puts "Thank you for your payment, you will soon receive a confirmation text :)"
     end
   end
 end
