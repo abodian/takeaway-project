@@ -1,6 +1,10 @@
 require_relative "./menu.rb"
+require_relative "./order_verify.rb"
 
 class CustomerOrder
+  attr_reader :order_number
+  attr_reader :customer_order
+  
   def initialize(cuisine, io)
     @cuisine = cuisine
     @order_number = "001"
@@ -11,49 +15,75 @@ class CustomerOrder
     @io = io
   end
 
-  def order_number
-    @order_number
-  end
-
   def show_menu
     @io.puts @customer_menu
   end
 
-  def add_dishes
-    order_complete = false
-    while !order_complete
-      prompt_dish = "Enter the number of the dish you would like to choose(or 'checkout' to finish) a dish number to add it to your order: "
-      @io.puts prompt_dish
-      dish_number = @io.gets.chomp
-      if dish_number == "checkout"
-        order_complete = true
+  def build_order
+    @order_complete = false
+    while !@order_complete
+      @io.puts "Enter the number of the dish you would like to add to your order (or 'remove' to remove a dish, or 'checkout' to finish): "
+      @dish_number = @io.gets.chomp
+      if @dish_number == "remove"
+        remove_dishes
       else
-        begin
-          chosen_dish_details = @menu_hash[dish_number]
-          chosen_dish = chosen_dish_details[0]
-          @customer_order << chosen_dish
-          @io.puts "#{chosen_dish} added to your order"
-        rescue
-          @io.puts "Sorry, that dish does not exist. Please try again"
-        end
+        add_dishes
       end
     end
     @io.puts "Moving to order verification..."
   end
 
-  def remove_dishes
-    # will remove a dish from an order
+  def add_dishes
+    if @dish_number == "checkout"
+      @order_complete = true
+    else
+      chosen_dish_details = @menu_hash[@dish_number]
+      if chosen_dish_details
+        chosen_dish = chosen_dish_details[0]
+        @customer_order << chosen_dish_details
+        @io.puts "#{chosen_dish} added to your order"
+      else
+        @io.puts "Sorry, that dish does not exist. Please try again"
+      end
+    end
   end
 
-
+  def remove_dishes
+    @io.puts "Enter the number of the dish you would like to remove from your order(or 'checkout' to finish): "
+    @dish_number = @io.gets.chomp
+    if @dish_number == "checkout"
+      @order_complete = true
+    else
+      chosen_dish_details = @menu_hash[@dish_number]
+      if chosen_dish_details
+        chosen_dish = chosen_dish_details[0]
+        @customer_order.delete(chosen_dish_details)
+        @io.puts "#{chosen_dish} removed from your order"
+      else
+        @io.puts "Sorry, that dish does not exist. Please try again"
+      end
+    end
+  end
 
   def order_verify?
-    # checks if customer has verified order, using instance of OrderVerify
-    # calls OrderText if true
-    # returns to add_dishes
+    verified = false
+    verify = OrderVerify.new("001")
+    while verified == false
+      @io.puts "Your order looks like this:"
+      verify.receipt(@customer_order)
+      @io.puts "Move to payment? (Y - to proceed, or N - to edit order): "
+      user_choice = @io.gets.chomp.downcase 
+      if user_choice == "y"
+        verify = true
+        verify.grand_total
+      else 
+        build_order
+      end
+    end
   end
 end
 
 # order = CustomerOrder.new("chinese", Kernel)
 # order.show_menu
-# order.add_dishes
+# order.build_order
+# order.order_verify?
