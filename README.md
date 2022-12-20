@@ -256,8 +256,4 @@ text = OrderText.new(001)
 text.sms_confirmation => # returns (example) "Thank you! Your order (number) was placed and will be delivered before 18:52"
 ```
 
-## 5. Implement the Behaviour
-
-_After each test you write, follow the test-driving process of red, green,
-refactor to implement the behaviour._
 
