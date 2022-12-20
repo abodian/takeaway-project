@@ -86,5 +86,5 @@ class CustomerOrder
   end
 end
 
-order = CustomerOrder.new(Kernel)
-order.run
+# order = CustomerOrder.new(Kernel)
+# order.run
