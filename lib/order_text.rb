@@ -9,18 +9,19 @@ class OrderText
 
   def sms_confirmation
     time_plus_one = Time.now + 1*60*60
-    account_sid = "" # Your Test Account SID from www.twilio.com/console/settings
-    auth_token = ""   # Your Test Auth Token from www.twilio.com/console/settings
-
-    @client = @requester  
+    account_sid = "" # Details removed for github Your Test Account SID from www.twilio.com/console/settings
+    auth_token = ""   # Deatils removed for github Your Test Auth Token from www.twilio.com/console/settings
+  
+    # replace text after @client = with @requester to pass rspec test
+    @client = Twilio::REST::Client.new account_sid, auth_token
     message = @client.messages.create(
     body: "Thank you! Your order (#{@order_number}) was placed and will be delivered before #{time_plus_one.strftime("%H:%M")}",
-    to: "+447714241945",    # Replace with your phone number
+    to: "+44771234567",    # Replace with your phone number
     from: "+15005550006")  # Use this Magic Number for creating SMS
 
     message.sid
   end
 end
 
-# text = OrderText.new("001", (Twilio::REST::Client account_sid, auth_token))
+# text = OrderText.new("001", "requester")
 # text.sms_confirmation

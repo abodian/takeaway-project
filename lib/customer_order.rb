@@ -1,5 +1,6 @@
 require_relative "./menu.rb"
 require_relative "./order_verify.rb"
+require_relative "./order_text.rb"
 
 class CustomerOrder
   attr_reader :order_number
@@ -82,9 +83,12 @@ class CustomerOrder
 
       verified = true
       @io.puts "Thank you for your payment, you will soon receive a confirmation text :)"
+      # next two lines would send a text if credentials are added to the order_text class
+      # text = OrderText.new("001", "requester")
+      # text.sms_confirmation
     end
   end
 end
 
-# order = CustomerOrder.new(Kernel)
-# order.run
+order = CustomerOrder.new(Kernel)
+order.run
