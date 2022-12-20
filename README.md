@@ -1,4 +1,4 @@
-# Chinese Takeaway Multi-Class Planned Design Recipe
+# Takeaway Multi-Class Planned Design Recipe
 
 ## 1. Describe the Problem
 
